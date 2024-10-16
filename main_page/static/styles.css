@@ -53,3 +53,15 @@ h2 {
     color: #343a40;
     /* 진한 회색 */
 }
+
+#chart-3 {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+#chart-3 img {
+    max-width: 45%;
+    height: auto;
+    margin: 10px;
+}
