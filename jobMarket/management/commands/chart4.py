@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
-from jobMarket.services.analysis.processing.process import query_from_primaries
-from jobMarket.services.analysis.processing.save import save_aggregation
+from jobMarket.services.analysis.top_3_job_type_by_lang.processing.process import query_from_primaries
+from jobMarket.services.analysis.top_3_job_type_by_lang.processing.save import save_aggregation
 
 
 class Command(BaseCommand):
