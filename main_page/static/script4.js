@@ -1,30 +1,41 @@
-const programmingData = {
-    "Java": [
-        { job: "백엔드 개발자", percentage: 30 },
-        { job: "자바 개발자", percentage: 30 },
-        { job: "웹 개발자", percentage: 40 }
-    ],
-    "Python": [
-        { job: "백엔드 개발자", percentage: 25 },
-        { job: "데이터 엔지니어", percentage: 35 },
-        { job: "프론트엔드 개발자", percentage: 40 }
-    ],
-    "JavaScript": [
-        { job: "프론트엔드 개발자", percentage: 50 },
-        { job: "풀스택 개발자", percentage: 30 },
-        { job: "웹 퍼블리셔", percentage: 20 }
-    ],
-    "C": [
-        { job: "임베디드 개발자", percentage: 10 },
-        { job: "IOT 개발자", percentage: 50 },
-        { job: "코어뱅킹 개발자", percentage: 40 }
-    ]
-};
+// const programmingData = [{
+//         "lang": "Java",
+//         "jobs": [
+//             { "job": "백엔드 개발자", "percentage": 30 },
+//             { "job": "자바 개발자", "percentage": 30 },
+//             { "job": "웹 개발자", "percentage": 40 }
+//         ]
+//     },
+//     {
+//         "lang": "Python",
+//         "jobs": [
+//             { "job": "백엔드 개발자", "percentage": 25 },
+//             { "job": "데이터 엔지니어", "percentage": 35 },
+//             { "job": "프론트엔드 개발자", "percentage": 40 }
+//         ]
+//     },
+//     {
+//         "lang": "JavaScript",
+//         "jobs": [
+//             { "job": "프론트엔드 개발자", "percentage": 50 },
+//             { "job": "풀스택 개발자", "percentage": 30 },
+//             { "job": "웹 퍼블리셔", "percentage": 20 }
+//         ]
+//     },
+//     {
+//         "lang": "C",
+//         "jobs": [
+//             { "job": "임베디드 개발자", "percentage": 10 },
+//             { "job": "IOT 개발자", "percentage": 50 },
+//             { "job": "코어뱅킹 개발자", "percentage": 40 }
+//         ]
+//     }
+// ];
 
 let myChart4; // 차트 인스턴스
 
 // 프로그래밍 언어 기준 해당 언어를 많이 쓰는 직업 Top 3 차트 그리기
-function drawProgrammingChart() {
+function drawProgrammingChart(programmingData) {
     const ctx = document.getElementById('myChart4').getContext('2d');
 
     // 기존 차트가 있다면 제거
@@ -112,34 +123,35 @@ function drawProgrammingChart() {
     myChart4 = new Chart(ctx, config);
 }
 
+function draw_chart1(programmingData) {
+    const opacity = 0.3; // 70% 불투명도
+    const hue = Math.random() * 360; // 색상 값 (Hue)
+    const barData = [];
+    programmingData.forEach(langData => {
+        langData.jobs.forEach(job => {
+            barData.push({
+                x: [langData.lang], // x축은 언어
+                y: [job.percentage], // y축은 직업 비율
+                name: job.job, // 직업 이름
+                type: 'bar', // 막대 차트
+                // 각 직업에 대해 다른 색상 설정
+                marker: { color: `rgba(${hue}), 70%, 50%, ${opacity})` },
+                text: job.percentage + '%', // 비율 표시
+                textposition: 'auto' // 비율 텍스트 위치
+            });
+        });
+    });
 
-function goToChart4() {
-    const chartImagePath = "{% static 'charts/programming_chart.png' %}";
-    const chartContainer = document.getElementById('chart-4');
-    const imageElement = document.createElement('img');
+    const barLayout = {
+        title: 'Programming Languages Job Distribution (Job-wise)',
+        xaxis: { title: 'Programming Language' },
+        yaxis: { title: 'Percentage' },
+        barmode: 'stack', // 막대를 쌓아 올리는 형태로 설정
+        showlegend: true
+    };
 
-    imageElement.src = chartImagePath;
-    imageElement.alt = '프로그래밍 언어 차트';
+    // 막대 차트 생성
+    Plotly.newPlot('bar-chart', barData, barLayout);
 
-    // 이미지가 존재하는지 확인
-    fetch(chartImagePath)
-        .then(response => {
-            if (response.ok) {
-                // 이미지가 존재하면 노출
-                chartContainer.innerHTML = ''; // 기존 내용 제거
-                chartContainer.appendChild(imageElement);
-                chartContainer.style.display = 'block'; // 차트 보이게 하기
-            } else {
-                // 이미지가 존재하지 않으면 Python 데이터로 차트 생성 요청
-                fetch('{% url "show_chart" %}')
-                    .then(response => response.json())
-                    .then(data => {
-                        // Python에서 차트 생성 후 응답받은 데이터로 차트 그리기
-                        drawProgrammingChart(); // 차트 그리기 함수 호출
-                        chartContainer.style.display = 'block'; // 차트 보이게 하기
-                    })
-                    .catch(error => console.error('차트 생성 중 오류 발생:', error));
-            }
-        })
-        .catch(error => console.error('이미지 확인 중 오류 발생:', error));
+
 }

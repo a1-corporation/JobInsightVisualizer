@@ -54,14 +54,26 @@ h2 {
     /* 진한 회색 */
 }
 
+/* 범준 */
 #chart-3 {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
 }
 
-#chart-3 img {
+/* #chart-3 img {
     max-width: 45%;
     height: auto;
     margin: 10px;
+} */
+
+#treemap-container {
+    display: flex;
+    flex-wrap: wrap;
 }
+
+/* #entry-treemap, #experienced-treemap {
+    flex: 1;
+    min-width: 300px;
+    margin: 5px;
+} */

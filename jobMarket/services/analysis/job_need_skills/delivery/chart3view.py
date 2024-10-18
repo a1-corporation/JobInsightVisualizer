@@ -1,7 +1,49 @@
-from jobMarket.models.shared import *
-from jobMarket.models.chart3model import *
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+
+from jobMarket.models.shared import *
+from jobMarket.models.chart3model import *
+
+tech_stack_schema = openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        "tech_name": openapi.Schema(type=openapi.TYPE_STRING, description="Skill"),
+        "percentage": openapi.Schema(type=openapi.TYPE_NUMBER, description="Ratio")
+    }
+)
+
+job_need_schema = openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        "job_title": openapi.Schema(type=openapi.TYPE_STRING, description="Job name"),
+        "entry_tech_stacks": openapi.Schema(
+            type=openapi.TYPE_ARRAY,
+            items=tech_stack_schema,
+            description="Entry level need skills"
+        ),
+        "experienced_tech_stacks": openapi.Schema(
+            type=openapi.TYPE_ARRAY,
+            items=tech_stack_schema,
+            description="Experienced level need skills"
+        )
+    }
+)
+
+@swagger_auto_schema(
+    method='get',
+    operation_description="Retrieve chart data for skill and job experience level.",
+    responses={
+        200: openapi.Response(
+            description="A list of skill and their associated job experience level.",
+            schema=openapi.Schema(
+                type=openapi.TYPE_ARRAY,
+                items=job_need_schema
+            )
+        )
+    }
+)
 
 @api_view(['GET'])
 def chartthree(request):
