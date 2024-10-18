@@ -1,0 +1,51 @@
+from django.db import models
+from .shared import BaseInfo
+from .job_position import JobPosting
+
+
+class SkillCategory(BaseInfo):
+    name = models.CharField(max_length=100, verbose_name="기술 카테고리 이름")
+
+
+class Skill(BaseInfo):
+    skill_cat = models.ForeignKey(
+        SkillCategory,
+        on_delete=models.PROTECT,
+        verbose_name="연관된 기술 카테고리 ID, skill_category 테이블과 참조됨",
+    )
+    name = models.CharField(max_length=100, verbose_name="기술의 이름")
+
+
+class JobSuperType(BaseInfo):
+    name = models.CharField(max_length=100, verbose_name="상위 직군 이름")
+
+
+class JobSubType(BaseInfo):
+    super_type = models.ForeignKey(
+        JobSuperType, on_delete=models.PROTECT, verbose_name="상위 직군의 ID"
+    )
+    name = models.CharField(max_length=100, verbose_name="하위 직군 이름")
+
+
+class JobSuperSubAssociation(BaseInfo):
+    job_posting = models.ForeignKey(
+        JobPosting, on_delete=models.PROTECT, verbose_name="채용 공고 ID"
+    )
+    super_type = models.ForeignKey(
+        JobSuperType, on_delete=models.PROTECT, verbose_name="상위 직군의 ID"
+    )
+    sub_type = models.ForeignKey(
+        JobSubType, on_delete=models.PROTECT, verbose_name="하위 직군의 ID"
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["job_posting", "sub_type"],
+                name="unique_job_super_sub_association",
+            )
+        ]
+
+
+class Platform(BaseInfo):
+    name = models.CharField(max_length=100, verbose_name="데이터 수집 플랫폼 이름")
