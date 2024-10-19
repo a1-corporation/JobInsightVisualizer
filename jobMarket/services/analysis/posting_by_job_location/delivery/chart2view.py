@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view
 from jobMarket.models.shared import *
 from jobMarket.models.chart3model import *
 from jobMarket.models.chart2model import *
-from jobMarket.serializers import PostingByJobLocationSerializer
+from .chart2serializers import *
 
 
 class PostingByJobLocationView(APIView):
