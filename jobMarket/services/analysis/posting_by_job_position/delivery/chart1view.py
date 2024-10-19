@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from jobMarket.models import PostingByJobPosition
-from .serializers import *
+from jobMarket.serializers import *
 
 from datetime import timedelta
 from django.utils.dateparse import parse_date
